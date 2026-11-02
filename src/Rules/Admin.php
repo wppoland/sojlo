@@ -317,7 +317,39 @@ final class Admin implements HasHooks {
 				<?php submit_button(); ?>
 			</form>
 
-			<?php $this->pro_upsell()->cards(); ?>
+			<?php
+			$this->render_companion_card();
+			$this->pro_upsell()->cards();
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Cross-recommendation card for sister plugins (Shiplume - Free Shipping Progress Bar).
+	 * Strictly scoped to the Sojlo settings screen per WordPress.org Guideline 11.
+	 */
+	private function render_companion_card(): void {
+		$is_nudge_active = defined( '\\Nudge\\VERSION' ) || ( function_exists( 'is_plugin_active' ) && ( is_plugin_active( 'nudge/shiplume.php' ) || is_plugin_active( 'shiplume/shiplume.php' ) ) );
+
+		?>
+		<div class="card" style="max-width: 800px; margin-top: 24px; padding: 18px 22px;">
+			<h2 class="title" style="margin-top: 0; font-size: 15px;"><?php echo esc_html__( 'Complementary integration: Shiplume - Shipping Progress Bar for WooCommerce', 'sojlo' ); ?></h2>
+			<p style="color: #50575e; line-height: 1.5;">
+				<?php echo esc_html__( 'Pair your minimum order rules with an interactive free shipping progress bar that nudges shoppers to add more to their cart.', 'sojlo' ); ?>
+			</p>
+			<?php if ( $is_nudge_active ) : ?>
+				<p style="color: #007017; font-weight: 600; margin-bottom: 0;">
+					<span class="dashicons dashicons-yes-alt" style="vertical-align: text-bottom;"></span>
+					<?php echo esc_html__( 'Shiplume is active.', 'sojlo' ); ?>
+				</p>
+			<?php else : ?>
+				<p style="margin-bottom: 0;">
+					<a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=' . rawurlencode( 'Shiplume - Shipping Progress Bar for WooCommerce' ) . '&tab=search&type=term' ) ); ?>" class="button button-secondary">
+						<?php echo esc_html__( 'Explore Shiplume Progress Bar', 'sojlo' ); ?> &rarr;
+					</a>
+				</p>
+			<?php endif; ?>
 		</div>
 		<?php
 	}
