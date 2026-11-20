@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,9 @@ Sojlo does not connect to any external services. Rules are evaluated against the
 Sojlo is fully translatable and ships the `sojlo.pot` template. Translations are delivered by WordPress.org language packs from translate.wordpress.org, which is where Polish, German and Spanish are being contributed; the package itself carries no compiled translation files.
 
 == Changelog ==
+
+= 1.1.6 =
+* Changed: quantity rules now cover exactly what the settings screen offers: all products, one product or one category. A rule with any other scope is ignored instead of being applied to every product.
 
 = 1.1.5 =
 * Fixed: cart messages now follow the shop language. Activating the plugin or saving the settings stored the default messages in the admin's language, so customers saw them untranslated; the fields now show the default as a placeholder.
