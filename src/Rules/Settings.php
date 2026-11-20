@@ -27,9 +27,8 @@ defined( 'ABSPATH' ) || exit;
  *  - msg_min_total      string Notice for under-minimum order total. Tokens: {min} {total}.
  *
  * Each rule row:
- *  - scope    string 'global' | 'product' | 'category' | 'role'
- *  - target   int    Product ID or term ID (0 for global/role)
- *  - role     string Role slug when scope is `role` (`guest` for visitors)
+ *  - scope    string 'global' | 'product' | 'category'
+ *  - target   int    Product ID or term ID (0 for global)
  *  - min      int    Minimum quantity (0 = no minimum)
  *  - max      int    Maximum quantity (0 = no maximum)
  *  - step     int    Quantity must be a multiple of this (0/1 = no step)
@@ -39,7 +38,7 @@ final class Settings {
 	public const OPTION = 'minimum_settings';
 
 	/** Allowed rule scopes. */
-	public const SCOPES = array( 'global', 'product', 'category', 'role' );
+	public const SCOPES = array( 'global', 'product', 'category' );
 
 	/**
 	 * Default settings used on first install and as a fallback.
@@ -113,9 +112,9 @@ final class Settings {
 		/**
 		 * Filters the resolved quantity rule rows before they are matched to products.
 		 *
-		 * Add-ons (e.g. Sojlo Pro) use this to inject per-role rules. Each row must
-		 * use the array{scope: string, target: int, min: int, max: int, step: int}
-		 * shape. Use scope `role`, `role` = role slug (`guest` for visitors).
+		 * Add-ons can append rows. Each row must use the
+		 * array{scope: string, target: int, min: int, max: int, step: int} shape
+		 * with one of the scopes in self::SCOPES.
 		 *
 		 * @param array<int, array{scope: string, target: int, min: int, max: int, step: int}> $out Rule rows.
 		 */
@@ -181,12 +180,8 @@ final class Settings {
 	 */
 	public function sanitize_rule( array $rule ): ?array {
 		$scope = sanitize_key( (string) ( $rule['scope'] ?? 'global' ) );
+		// An unknown scope is dropped, never widened to every product.
 		if ( ! in_array( $scope, self::SCOPES, true ) ) {
-			$scope = 'global';
-		}
-
-		// Role rules are injected by add-ons via minimum/rules, not the FREE settings UI.
-		if ( 'role' === $scope ) {
 			return null;
 		}
 

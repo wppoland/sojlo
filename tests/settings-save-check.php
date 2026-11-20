@@ -15,7 +15,7 @@ function get_option($k, $def = false) { return $GLOBALS['opts'][$k] ?? $def; }
 function add_option($k, $v) { if (!isset($GLOBALS['opts'][$k])) $GLOBALS['opts'][$k] = $v; return true; }
 function update_option($k, $v) { $GLOBALS['opts'][$k] = $v; return true; }
 function apply_filters($h, $v) {
-    if ($h === 'minimum/rules' && $GLOBALS['inject']) { $v[] = ['scope' => 'role', 'target' => 0, 'role' => 'shop_manager', 'min' => 10, 'max' => 0, 'step' => 0]; }
+    if ($h === 'minimum/rules' && $GLOBALS['inject']) { $v[] = ['scope' => 'global', 'target' => 0, 'min' => 10, 'max' => 0, 'step' => 0]; }
     if ($h === 'minimum/min_order_total' && $GLOBALS['inject']) { return 500.0; }
     return $v;
 }
