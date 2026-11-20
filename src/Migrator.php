@@ -34,7 +34,10 @@ final class Migrator {
 
 		// Seed defaults on first install so the settings screen is never empty.
 		if ( false === get_option( Settings::OPTION, false ) ) {
-			add_option( Settings::OPTION, Settings::defaults() );
+			// Messages are seeded blank: Settings::message() resolves blank to the
+			// translated default, while a stored sentence would freeze the
+			// language of whoever triggered this request into the shop.
+			add_option( Settings::OPTION, array_map( static fn ( $v ) => is_string( $v ) ? '' : $v, Settings::defaults() ) );
 		}
 
 		update_option( self::OPTION, VERSION, false );
