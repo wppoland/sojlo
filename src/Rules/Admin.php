@@ -196,7 +196,9 @@ final class Admin implements HasHooks {
 		}
 
 		$all     = $this->settings->all();
-		$rules   = $this->settings->rules();
+		// Stored rules, not rules(): add-ons inject per-visitor rows through its
+		// filter, and a row rendered here is written back on save.
+		$rules   = array_values( array_filter( array_map( array( $this->settings, 'sanitize_rule' ), array_filter( (array) $all['rules'], 'is_array' ) ) ) );
 		$enabled = (bool) $all['enabled'];
 		$name    = Settings::OPTION;
 		?>
@@ -240,7 +242,7 @@ final class Admin implements HasHooks {
 									type="number"
 									id="minimum_order_total"
 									name="<?php echo esc_attr( $name ); ?>[min_order_total]"
-									value="<?php echo esc_attr( (string) $this->settings->min_order_total() ); ?>"
+									value="<?php echo esc_attr( (string) (float) $all['min_order_total'] ); ?>"
 									min="0"
 									step="0.01"
 									class="small-text"
@@ -426,7 +428,10 @@ final class Admin implements HasHooks {
 	 * @param string $tokens Comma-separated available tokens.
 	 */
 	private function render_message_field( string $name, string $key, string $label, string $tokens ): void {
-		$value = $this->settings->message( $key );
+		// The stored text, with the translated default as placeholder: prefilling
+		// the default would store it on save and freeze one language.
+		$stored = get_option( Settings::OPTION, array() );
+		$value  = is_array( $stored ) ? (string) ( $stored[ $key ] ?? '' ) : '';
 		?>
 		<tr>
 			<th scope="row">
@@ -438,6 +443,7 @@ final class Admin implements HasHooks {
 					id="minimum_<?php echo esc_attr( $key ); ?>"
 					name="<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>]"
 					value="<?php echo esc_attr( $value ); ?>"
+					placeholder="<?php echo esc_attr( (string) ( Settings::defaults()[ $key ] ?? '' ) ); ?>"
 					class="large-text"
 				/>
 				<p class="description">

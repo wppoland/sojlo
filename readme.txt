@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,10 @@ Sojlo does not connect to any external services. Rules are evaluated against the
 Sojlo is fully translatable and ships the `sojlo.pot` template. Translations are delivered by WordPress.org language packs from translate.wordpress.org, which is where Polish, German and Spanish are being contributed; the package itself carries no compiled translation files.
 
 == Changelog ==
+
+= 1.1.5 =
+* Fixed: cart messages now follow the shop language. Activating the plugin or saving the settings stored the default messages in the admin's language, so customers saw them untranslated; the fields now show the default as a placeholder.
+* Fixed: saving the settings no longer copies a rule or order minimum an add-on applies to your own user role into the rules for every customer.
 
 = 1.1.4 =
 * Fixed: deleting the plugin on a multisite network now removes its settings from every site, not only the main one.
