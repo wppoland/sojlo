@@ -104,9 +104,9 @@ Yes. This plugin is compatible with WordPress Multisite. Network activate it or 
 
 == Screenshots ==
 
-1. On the storefront.
-2. Settings in the WordPress admin.
-3. On a mobile device.
+1. Cart notice when the order total is below the minimum.
+2. Settings under WooCommerce > Sojlo: minimum order total, quantity rules and messages.
+3. The notice on a phone.
 == External Services ==
 
 Sojlo does not connect to any external services. Rules are evaluated against the cart on your own server, and the only data stored is two WordPress options, `minimum_settings` (your rules and notice wording) and `minimum_db_version`. The plugin sends no email and creates no custom database tables.
